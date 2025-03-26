@@ -1,12 +1,14 @@
 #!/bin/bash
 docker run -d \
-	--name postgres-test \
+	--name postgres_box \
 	-e POSTGRES_PASSWORD=test \
   -e POSTGRES_DB=algodb \
   -p 5432:5432 \
+  -v ./db-data:/var/lib/postgresql/data \
+  -v ./db-init:/docker-entrypoint-initdb.d \
   postgres
   # -e POSTGRES_USER=postgres \
-  # -v /db-init/init.sql:/docker-entrypoint-initdb.d/init.sql \
-# docker exec -it postgres-test bash
+# docker exec -it postgres_box bash
+# docker container logs postgres_box -> command for obtaining logs for postgres
 # psql -U postgres
 # \c algodb

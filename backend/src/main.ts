@@ -11,6 +11,7 @@ export function startGreetingServer() {
 
 function main() {
   // nothing to see here
+  console.log("Running!");
 }
 
 main();

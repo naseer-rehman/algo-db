@@ -18,12 +18,12 @@ CREATE TABLE categories (
 -- );
 
 CREATE TABLE posts (
-  id SERIAL PRIMARY KEY
-  title VARCHAR(300) NOT NULL
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(300) NOT NULL,
   content TEXT,
   upvotes INT NOT NULL,
   downvotes INT NOT NULL,
   author_id SERIAL,
   PRIMARY KEY(id),
-  FOREIGN KEY(author_id) REFERENCES 
+  FOREIGN KEY(author_id) REFERENCES users
 );
