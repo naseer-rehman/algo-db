@@ -1,7 +1,7 @@
-import { Router } from "@oak/oak/router";
+import express from "express";
 import { getUsers } from "../controllers/userController.ts"
 
-const router = new Router();
+const router = express.Router();
 
 router.get("/users", getUsers);
 

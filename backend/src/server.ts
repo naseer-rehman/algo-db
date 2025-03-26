@@ -1,13 +1,17 @@
-import { Application, Router } from "@oak/oak";
+import express from "express";
+import userRoutes from "./routes/userRoutes";
 
-const router = new Router();
+const router = express.Router();
 
-router.get("/", (ctx) => {
-  ctx.response.body = "Hello world";
+router.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
-const app = new Application();
-app.use(router.routes());
-app.use(router.allowedMethods());
+const app = express();
+// app.use(router.routes());
+// app.use(router.allowedMethods());
 
-app.listen({port: 8000});
+app.use("/users", userRoutes);
+app.use("/", router);
+
+app.listen(8000);

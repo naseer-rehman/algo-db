@@ -3,7 +3,7 @@ docker run -d \
 	--name postgres_box \
 	-e POSTGRES_PASSWORD=test \
   -e POSTGRES_DB=algodb \
-  -p 5432:5432 \
+  -p 8080:5432 \
   -v ./db-data:/var/lib/postgresql/data \
   -v ./db-init:/docker-entrypoint-initdb.d \
   postgres

@@ -1,12 +1,15 @@
+import express from "express";
+
 function greet(name: string): string {
   return `Hello, ${name}!`;
 }
 
 export function startGreetingServer() {
-  const server = Deno.serve((_req) => {
-    return new Response(greet("World"));
+  const app = express();
+  app.get("/", (_req, res) => {
+    res.send("Hello, World!");
   });
-  return server;
+  return app.listen(8000);
 }
 
 function main() {

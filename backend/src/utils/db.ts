@@ -1,12 +1,11 @@
 // Connects to postgresql database
-import { Client } from "https://deno.land/x/postgres/mod.ts";
+import { Client } from "pg";
+
 
 const database = new Client({
-  user: Deno.env.get("DB_USER"),
-  database: Deno.env.get("DB_NAME"),
-  hostname: Deno.env.get("DB_HOSTNAME"),
-  password: Deno.env.get("DB_PASSWORD"),
-  port: parseInt(Deno.env.get("DB_PORT") ?? ""),
+  host: Bun.env.DB_HOSTNAME,
+  password: Bun.env.DB_PASSWORD,
+  port: parseInt(Bun.env.DB_PORT ?? ""),
 });
 
 await database.connect();
