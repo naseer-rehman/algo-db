@@ -24,4 +24,8 @@ Other information:
 * `db-init` contains an SQL script that gets copied to the postgres container to initialize the table data on first load (if data isn't already present).
   * I will be adding some CSV files to populate the DB with test data.
 * `db-data` is attached to the container and contains the application data. If the data already exists, the initialization script is not run.
-* I need  to figure out how to deploy this database eventually...
+* I need to figure out how to deploy this database eventually...
+
+Notes:
+* Use docker compose for running the services for development. Just to be fancy.
+* idk

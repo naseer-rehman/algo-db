@@ -9,12 +9,22 @@ export function startGreetingServer() {
   app.get("/", (_req, res) => {
     res.send("Hello, World!");
   });
-  return app.listen(8000);
+  app.get("/close", (_req, res) => {
+    res.sendStatus(200);
+  });
+  return app.listen(process.env.PORT || 8000);
 }
 
 function main() {
   // nothing to see here
   console.log("Running!");
+  const server = startGreetingServer();
+  server.on("close", () => {
+    console.log("Server closed.");
+  });
+  process.on("SIGINT", () => {
+    server.close();
+  });
 }
 
 main();

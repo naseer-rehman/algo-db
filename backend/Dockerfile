@@ -1,12 +1,12 @@
-FROM denoland/deno:2.1.4
+FROM oven/bun:1 AS base
+WORKDIR /usr/src/app
 
-EXPOSE 8080
+FROM base AS install
+RUN mkdir -p /temp/dev/
+COPY package.json bun.lock /temp/dev/
+RUN cd /temp/dev && bun install --frozen-lockfile
 
-WORKDIR /app
-
-COPY deno.json .
-COPY deno.lock .
-RUN deno install
-
+FROM base AS dev
+COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
-CMD ["task", "start"]
+CMD ["bun", "start"]
