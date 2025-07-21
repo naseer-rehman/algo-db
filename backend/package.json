@@ -4,11 +4,13 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "bun run src/main.ts"
+    "start": "bun run src/main.ts",
+    "dev": "bun run --hot src/main.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/express": "^5.0.1"
+    "@types/express": "^5.0.1",
+    "tsx": "^4.20.3"
   },
   "peerDependencies": {
     "typescript": "^5"

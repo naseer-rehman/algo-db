@@ -1,4 +1,5 @@
 import express from "express";
+import process from "node:process";
 
 function greet(name: string): string {
   return `Hello, ${name}!`;
