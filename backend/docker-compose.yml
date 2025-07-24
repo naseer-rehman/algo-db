@@ -1,13 +1,24 @@
 services:
   backend:
-    depends_on: test_db
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+    environment:
+      - PORT=8000
 
   db:
     image: postgres
+    container_name: postgres_box
     environment:
-      POSTGRES_PASSWORD: testpassword
-    # volumes:
-    #   - ./db-data:/var/lib/postgresql/data
-    ports: 
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: algodb
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+    ports:
       - "8080:5432"
-    command: echo hello world
