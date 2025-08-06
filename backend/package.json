@@ -4,19 +4,21 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "bun run src/main.ts",
-    "dev": "bun run --hot src/main.ts"
+    "start": "bun run src/server.ts",
+    "dev": "bun run src/server.ts",
+    "simple-test": "bun run --hot src/main.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/express": "^5.0.1",
+    "@types/express": "^5.0.3",
     "tsx": "^4.20.3"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.8.2"
   },
   "dependencies": {
-    "@types/pg": "^8.11.11",
-    "express": "^4.21.2"
+    "@types/pg": "^8.15.5",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
   }
 }

@@ -1,5 +1,7 @@
-import { getUsers as getAllUsers } from "../services/userServices.ts";
+import { Request, Response } from "express";
+import { getUsers as getAllUsers } from "../services/userServices";
 
-export function getUsers() {
-  return getAllUsers();
+export async function getUsers(_req: Request, _res: Response) {
+  const users = await getAllUsers();
+  _res.json(users);
 }

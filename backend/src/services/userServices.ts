@@ -1,4 +1,4 @@
-import { getAllUsers } from "../models/userModel.ts"
+import { getAllUsers } from "../models/userModel"
 
 export function getUsers() {
   return getAllUsers();

@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { startGreetingServer } from "../src/main.ts";
+import { startGreetingServer } from "../src/main";
 
 test("Hello World Server", async function addTest() {
   const server = startGreetingServer();
