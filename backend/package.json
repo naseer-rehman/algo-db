@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "bun run src/server.ts",
-    "dev": "bun run src/server.ts",
+    "dev": "bun run --hot src/server.ts",
     "simple-test": "bun run --hot src/main.ts"
   },
   "devDependencies": {
@@ -17,7 +17,11 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "@octokit/oauth-app": "^8.0.1",
+    "@types/cookie-parser": "^1.4.9",
     "@types/pg": "^8.15.5",
+    "axios": "^1.11.0",
+    "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
     "pg": "^8.16.3"
   }

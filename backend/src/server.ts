@@ -1,17 +1,20 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import userRoutes from "./routes/userRoutes";
-
-const router = express.Router();
-
-router.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+import integrationRoutes from "./routes/integrationRoutes";
+import cookieParser from "cookie-parser";
 
 const app = express();
-// app.use(router.routes());
-// app.use(router.allowedMethods());
 
-app.use("/users", userRoutes);
-app.use("/", router);
+app.use(cookieParser(Bun.env.COOKIES_SECRET ?? "monkey hand on chin"));
+app.use(express.json());
+
+app.get("/", (_req, res) => res.sendStatus(501));
+
+const redirectToGithubAuth = (_req: Request, res: Response) => {
+  res.redirect("/api/integrations/github/oauth2/");
+};
+app.get("/login", redirectToGithubAuth);
+app.use("/api/integrations", integrationRoutes);
+app.use("/api/users", userRoutes);
 
 app.listen(8000);

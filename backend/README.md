@@ -24,6 +24,7 @@ List of commands and their purpose:
   View logs from the postgres container
 * `./run_db.sh`
   Starts the postgres container
+  * Note: no longer necessary with docker compose
 
 Other information:
 * `db-init` contains an SQL script that gets copied to the postgres container to initialize the table data on first load (if data isn't already present).
@@ -32,5 +33,43 @@ Other information:
 * I need to figure out how to deploy this database eventually...
 
 Notes:
-* Use docker compose for running the services for development. Just to be fancy.
 * idk
+
+### Server Routes
+
+* `app/login` => redirect to github authentication
+* `app/` => landing page
+* `app/api/...` => the primary interface the server and client operates on
+* `app/api/integrations/...` => handles interaction with external resources
+* `app/api/integrations/github/oauth2/` => redirects to github authorization endpoint
+* `app/api/integrations/github/oauth2/callback` => handles redirect from github after user authenticates with oauth service
+* `app/api/integrations/leetcode/...` => where I scrape leetcode 
+* `app/api/user/...` => all user-related operations
+  * Create user
+  * View user profile
+  * View other user profiles
+  * Change user settings
+* `app/api/posts/...` => landing page for posts: trending, most popular, categories, etc.
+* ...
+
+### Github OAuth Flow
+1. User clicks the login button, directing them to `/login`, then redirected to `/api/integrations/github/oauth2` which redirects to github's authorization endpoint.
+   1. This is where a `state` token is also created, to prevent CSRF.
+   2. The `state` token is stored in the user's cookies.
+   3. It will be verified later in the callback by comparing Github's token and the one stores in the user's cookies.
+2. Github redirects the user back to `/api/integrations/github/oauth2/callback`, github provides the authorization code in query params.
+3. Server requests authorization token from github.
+   1. At this point, how do I store/authenticate the user's session on the app?
+4. Github returns authorization token, if successful.
+5. User information is inserted into database
+6. Provide a user with a cookie for their session
+
+Some things to consider:
+- Do I want to use `cookie-parser` or `express-session`?
+  - The answer is to use both: `express-session` is used primarily for storing user sessions in a database on the server-side and the user's cookies on the client-side, while `cookie-parser` is a general-purpose cookie parsing middleware.
+  - Note: that is until I get to using better-auth
+
+### Authenticating User Requests
+1. Check user cookie against db session table
+2. If not found, redirect to `/login`?
+   1. Should there be multiple sessions for the same user? Should I limit to only 1 session per user? 
