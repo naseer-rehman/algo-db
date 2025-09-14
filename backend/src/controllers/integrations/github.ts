@@ -41,16 +41,16 @@ export async function handleGithubAuthorizationCallback(req: Request, res: Respo
     res.sendStatus(401);
     return;
   }
+  res.clearCookie("state");
   if (!crypto.timingSafeEqual(encodedClientState, encodedGithubState)) {
-    res.clearCookie("state");
     res.sendStatus(401);
     return;
   }
   const token = await retrieveAuthorizationToken(code);
-  if (token === false) {
-    // NOTE: Throw exception to make it clear what the issue is?
-    // In this case, scopes did not match or state failed
-    res.sendStatus(401);
-  }
+  // if (token === false) {
+  //   // TODO: Throw exception to make it clear what the issue is?
+  //   // In this case, scopes or state mismatched
+  //   res.sendStatus(401);
+  // }
   res.sendStatus(501);
 }

@@ -17,12 +17,15 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "@octokit/auth-oauth-app": "^9.0.1",
     "@octokit/oauth-app": "^8.0.1",
+    "@octokit/rest": "^22.0.0",
     "@types/cookie-parser": "^1.4.9",
     "@types/pg": "^8.15.5",
     "axios": "^1.11.0",
     "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
-    "pg": "^8.16.3"
+    "pg": "^8.16.3",
+    "zod": "^4.1.5"
   }
 }

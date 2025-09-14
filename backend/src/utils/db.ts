@@ -1,7 +1,7 @@
 // Connects to postgresql database
-import { Client } from "pg";
+import { Pool } from "pg";
 
-const database = new Client({
+export const pool = new Pool({
   host: Bun.env.DB_HOST,
   user: Bun.env.DB_USER,
   password: Bun.env.DB_PASSWORD,
@@ -9,6 +9,10 @@ const database = new Client({
   database: Bun.env.DB_NAME,
 });
 
-await database.connect();
+// TODO: If using a centralized, wrapped query function, then I gotta
+//       set type definitions correctly...
+// export const query = async (text: string, values?: any[]) => {
+//   return pool.query(text, values); 
+// };
 
-export default database;
+export default pool;

@@ -17,4 +17,7 @@ app.get("/login", redirectToGithubAuth);
 app.use("/api/integrations", integrationRoutes);
 app.use("/api/users", userRoutes);
 
+// TODO: Add in global error handler
+// app.use(globalErrorHandler);
+
 app.listen(8000);

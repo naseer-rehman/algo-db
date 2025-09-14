@@ -1,30 +1,33 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TYPE vote_type AS ENUM ('upvote', 'downvote');
 
 CREATE TABLE users (
-  id UUID,
-  github_id VARCHAR(50) UNIQUE,
-  github_username VARCHAR(50),
+  id UUID DEFAULT uuid_generate_v4(),
+  github_id VARCHAR(50) UNIQUE NOT NULL,
+  github_username VARCHAR(50) NOT NULL,
   github_avatar_url VARCHAR,
   github_profile_url VARCHAR,
   github_bio TEXT,
   github_location VARCHAR(100),
   github_access_token VARCHAR,
+  github_refresh_token VARCHAR,
   karma INT NOT NULL,
-  created_at TIMESTAMP NOT NULL,
-  updated_at TIMESTAMP NOT NULL,
-  last_login_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL,
+  last_login_at TIMESTAMPTZ NOT NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE posts (
-  id UUID,
+  id UUID DEFAULT uuid_generate_v4(),
   title VARCHAR(300) NOT NULL,
   content TEXT NOT NULL,
   upvotes INT NOT NULL,
   downvotes INT NOT NULL,
   author_id UUID,
-  created_at timestamp NOT NULL,
-  last_edited_at timestamp NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL,
+  last_edited_at TIMESTAMPTZ NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (author_id) REFERENCES users(id)
 );
@@ -37,7 +40,7 @@ CREATE TABLE post_votes (
 );
 
 CREATE TABLE categories (
-  id UUID,
+  id UUID DEFAULT uuid_generate_v4(),
   name VARCHAR(255) UNIQUE NOT NULL,
   PRIMARY KEY (id)
 );
@@ -51,7 +54,7 @@ CREATE TABLE has_category (
 );
 
 CREATE TABLE post_images (
-  id uuid,
+  id uuid DEFAULT uuid_generate_v4(),
   image_path text NOT NULL,
   post_id uuid NOT NULL,
   PRIMARY KEY (id),
@@ -59,7 +62,7 @@ CREATE TABLE post_images (
 );
 
 CREATE TABLE comments (
-  id uuid,
+  id uuid DEFAULT uuid_generate_v4(),
   content TEXT NOT NULL,
   author_id uuid NOT NULL,
   post_id uuid NOT NULL,

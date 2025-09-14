@@ -73,3 +73,18 @@ Some things to consider:
 1. Check user cookie against db session table
 2. If not found, redirect to `/login`?
    1. Should there be multiple sessions for the same user? Should I limit to only 1 session per user? 
+
+### My Notes
+- maybe try using Zod
+- start using HTTPS in development and prepare for deployment
+- implement session-based authentication
+- look into using some logging middleware
+- use rate limiter for github
+- implement some global error handler?
+- implement some kinda rate limiter for my own API
+  - `express-rate-limit`?
+- use `helmet`
+- use `cors`?
+- look into `tRPC`, might be useful since this is a typescript monorepo
+- ...
+
