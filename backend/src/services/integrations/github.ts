@@ -14,15 +14,6 @@ const oauthApp = new OAuthApp({
   clientId: GITHUB_CLIENT_ID,
   clientSecret: GITHUB_CLIENT_SECRET,
 });
-// const octokit = new Octokit({
-//   userAgent: "algodb v1.0.0",
-//   timeZone: "America/Toronto",
-//   authStrategy: createOAuthAppAuth,
-//   auth: {
-//     clientId: GITHUB_CLIENT_ID,
-//     clientSecret: GITHUB_CLIENT_SECRET,
-//   },
-// });
 
 export function getAuthorizationEndpoint() {
   const CALLBACK_URI_BASE = `http://${Bun.env.EXPRESS_HOST}:${Bun.env.EXPRESS_PORT}`
@@ -42,7 +33,8 @@ export async function retrieveUserData(accessToken: string) {
     access_token: accessToken,
   });
   if (response.status != 200) {
-    // TODO: report error
+    // TODO: Name this error
+    throw new Error("Failed to retrieve Github user data.");
   }
   return response.data;
 }
@@ -81,5 +73,5 @@ export async function retrieveAuthorizationToken(authCode: string) {
     githubRefreshToken: null,
   };
   await createUser(newUser);
-  return;
+  return token;
 }

@@ -75,7 +75,7 @@ Some things to consider:
    1. Should there be multiple sessions for the same user? Should I limit to only 1 session per user? 
 
 ### My Notes
-- maybe try using Zod
+- maybe try using Zod [done]
 - start using HTTPS in development and prepare for deployment
 - implement session-based authentication
 - look into using some logging middleware

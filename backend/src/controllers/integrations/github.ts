@@ -5,8 +5,9 @@ import crypto from "crypto";
 export function redirectToGithubAuthorizationEndpoint(req: Request, res: Response) {
   const link = getAuthorizationEndpoint();
   const state = link.searchParams.get("state");
+  const maxAgeMilliseconds = 1000 * 60 * 5;
   res.cookie("state", state, {
-    maxAge: 1000 * 60 * 5,
+    maxAge: maxAgeMilliseconds,
     signed: true,
     httpOnly: true,
     sameSite: "lax",
