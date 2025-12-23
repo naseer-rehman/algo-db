@@ -68,6 +68,7 @@ Some things to consider:
 - Do I want to use `cookie-parser` or `express-session`?
   - The answer is to use both: `express-session` is used primarily for storing user sessions in a database on the server-side and the user's cookies on the client-side, while `cookie-parser` is a general-purpose cookie parsing middleware.
   - Note: that is until I get to using better-auth
+- I will need to go back to the Github dashboard to modify the URL of my app
 
 ### Authenticating User Requests
 1. Check user cookie against db session table
@@ -76,15 +77,16 @@ Some things to consider:
 
 ### My Notes
 - maybe try using Zod [done]
-- start using HTTPS in development and prepare for deployment
-- implement session-based authentication
+- implement session-based authentication [wip]
+- start using HTTPS in development to prepare for deployment
+  - kind of an annoying step, I'll do this after
 - look into using some logging middleware
 - use rate limiter for github
 - implement some global error handler?
 - implement some kinda rate limiter for my own API
   - `express-rate-limit`?
-- use `helmet`
-- use `cors`?
+- use `helmet` [done]
+- use `cors` [done]
 - look into `tRPC`, might be useful since this is a typescript monorepo
 - ...
 

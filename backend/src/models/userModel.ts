@@ -34,7 +34,6 @@ type PublicUser = z.infer<typeof publicUserSchema>;
 export type {PublicUser as User};
 type User = z.infer<typeof privateUserSchema>; // internal user type
 
-// TODO: fix the parameter type/shape...
 export async function createUser(userInfo: NewUser) {
    userInfo = newUserSchema.parse(userInfo);
    const nowTimeUTC = new Date();
@@ -65,6 +64,7 @@ export async function createUser(userInfo: NewUser) {
    const res = pool.query<User>(insertUserQuery, queryValues);
 }
 
+// Updates the last login date for the user to the current time and date.
 export async function updateUserLastLoginDate(id) {
    return;
 }
@@ -90,8 +90,8 @@ export async function updateUserRefreshToken(id, newRefreshToken) {
 }
 
 export async function getAllUsers() {
-   // const result = await pool.query<User>(`SELECT id, github_username AS username FROM users LIMIT 1000;`);
-   // return result.rows.map(([id, username]: [string, number]) => {
-   //   return {id, username};
-   // });
+   const result = await pool.query<User>(`SELECT id, github_username AS username FROM users LIMIT 1000;`);
+   return result.rows.map(({id, githubUsername: username}) => {
+      return {id, username};
+   });
 }
