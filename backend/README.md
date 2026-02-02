@@ -52,19 +52,19 @@ Notes:
 * `app/api/posts/...` => landing page for posts: trending, most popular, categories, etc.
 * ...
 
-### Github OAuth Flow
-1. User clicks the login button, directing them to `/login`, then redirected to `/api/integrations/github/oauth2` which redirects to github's authorization endpoint.
+### Github OAuth Flow, including session-based authentication
+1. User clicks the login button, directing them to `/login`, then redirected to `/api/integrations/github/oauth2`, which redirects to github's authorization endpoint.
    1. This is where a `state` token is also created, to prevent CSRF.
    2. The `state` token is stored in the user's cookies.
-   3. It will be verified later in the callback by comparing Github's token and the one stores in the user's cookies.
+   3. It will be verified later in the callback by comparing Github's token and the one stored in the user's cookies.
 2. Github redirects the user back to `/api/integrations/github/oauth2/callback`, github provides the authorization code in query params.
 3. Server requests authorization token from github.
    1. At this point, how do I store/authenticate the user's session on the app?
-4. Github returns authorization token, if successful.
-5. User information is inserted into database
-6. Provide a user with a cookie for their session
+4. User information is inserted into database
+5. Provide a user with a cookie for their session
 
 Some things to consider:
+- I considered refresh tokens, but found out they aren't applicapable to github oauth. They apply to Github Apps, which is way more complicated than this flow.
 - Do I want to use `cookie-parser` or `express-session`?
   - The answer is to use both: `express-session` is used primarily for storing user sessions in a database on the server-side and the user's cookies on the client-side, while `cookie-parser` is a general-purpose cookie parsing middleware.
   - Note: that is until I get to using better-auth

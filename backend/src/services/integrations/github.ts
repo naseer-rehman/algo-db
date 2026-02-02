@@ -1,9 +1,7 @@
-import axios from "axios";
 import crypto from "crypto";
 import { OAuthApp } from "@octokit/oauth-app";
 import { Octokit } from "@octokit/rest";
-import { createOAuthAppAuth } from "@octokit/auth-oauth-app";
-import { createUser, NewUser } from "../../models/userModel";
+import { createUser, getUserByGithubId, NewUser } from "../../models/userModel";
 
 const GITHUB_SCOPES = ["read:user"].sort();
 const GITHUB_CLIENT_ID = Bun.env.GITHUB_CLIENT_ID ?? "null";
@@ -14,6 +12,8 @@ const oauthApp = new OAuthApp({
   clientId: GITHUB_CLIENT_ID,
   clientSecret: GITHUB_CLIENT_SECRET,
 });
+
+type GitHubUserData = Awaited<ReturnType<typeof retrieveUserData>>;
 
 export function getAuthorizationEndpoint() {
   const CALLBACK_URI_BASE = `http://${Bun.env.EXPRESS_HOST}:${Bun.env.EXPRESS_PORT}`
@@ -43,12 +43,13 @@ export async function retrieveUserData(accessToken: string) {
 // TODO: Name this function better
 export async function retrieveAuthorizationToken(authCode: string) {
   const RANDOM_STATE = crypto.randomBytes(16).toString("hex");
-  const {
-    authentication: { token, scopes }
-  } = await oauthApp.createToken({
+  const oauthAppTokenData = await oauthApp.createToken({
     code: authCode,
     state: RANDOM_STATE,
   });
+  const {
+    authentication: { token, scopes }
+  } = oauthAppTokenData;
   // TODO: Name this error
   if (scopes.length < GITHUB_SCOPES.length) {
     throw new Error("Insufficient scopes allowed.");
@@ -60,9 +61,35 @@ export async function retrieveAuthorizationToken(authCode: string) {
     // TODO: Name this error
     throw new Error("Insufficient scopes allowed.");
   }
+  return token;
+}
+
+/**
+ * Creates a new user account from the provided github user data, if an account doesn't
+ * already exist for the github account.
+ * @param githubUserData 
+ * @returns 
+ */
+export async function createUserIfNotExistsFromGitHubData(
+  token: string, githubUserData: GitHubUserData) {
+  const existingUserData = await getUserByGithubId(githubUserData.id.toString());
+  if (existingUserData !== null) {
+    return existingUserData;
+  }
+  return await createNewUserFromData(token, githubUserData);
+}
+
+export async function getGitHubUserData(token: string) {
+  return await retrieveUserData(token);
+}
+
+export async function createNewUserFromToken(token: string) {
   const userData = await retrieveUserData(token);
-  console.log(userData);
-  const newUser: NewUser = {
+  return createNewUserFromData(token, userData);
+}
+
+export async function createNewUserFromData(token: string, userData: GitHubUserData) {
+    const newUser: NewUser = {
     githubUsername: userData.login,
     githubId: userData.id.toString(),
     githubAvatarUrl: userData.avatar_url,
@@ -72,6 +99,5 @@ export async function retrieveAuthorizationToken(authCode: string) {
     githubAccessToken: token,
     githubRefreshToken: null,
   };
-  await createUser(newUser);
-  return token;
+  return await createUser(newUser);
 }

@@ -6,6 +6,7 @@ RUN bun install
 
 COPY . .
 
+# TODO: Remove this? I don't know why I even did this
 VOLUME /app
 
 EXPOSE 8000

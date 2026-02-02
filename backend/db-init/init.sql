@@ -70,7 +70,7 @@ CREATE TABLE comments (
   post_id uuid NOT NULL,
   upvotes int NOT NULL DEFAULT 0,
   downvotes int NOT NULL DEFAULT 0,
-  created_at timestampz NOT NULL,
+  created_at timestamptz NOT NULL,
   PRIMARY KEY(id),
   CONSTRAINT commented
     FOREIGN KEY (author_id)
@@ -89,11 +89,18 @@ CREATE TABLE comment_votes (
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE sessions {
-  id uuid,
-  user_id uuid NOT NULL,
-  "session" json,
-  expires_at timestamptz,
-  PRIMARY KEY (id),
-  FOREIGN KEY (user_id) REFERENCES users(id)
-};
+-- Note: Connect pg simple should take care of creating a sessions table
+--   -> If not, then I can add in the sql file to this init folder so that 
+--      the docker compose can run the table creation on initialization
+-- CREATE TABLE sessions {
+--   id uuid,
+--   user_id uuid NOT NULL,
+--   -- "session" json,
+--   expires_at timestamptz,
+--   created_at timestamptz,
+--   last_used_at timestamptz,
+--   PRIMARY KEY (id),
+--   FOREIGN KEY (user_id) REFERENCES users(id)
+-- };
+
+CREATE INDEX idx_github_id ON users (github_id);

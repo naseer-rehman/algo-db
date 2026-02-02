@@ -1,6 +1,14 @@
 import { Request, Response } from "express";
-import { getAuthorizationEndpoint, retrieveAuthorizationToken } from "../../services/integrations/github";
+import { 
+  getAuthorizationEndpoint, 
+  getGitHubUserData, 
+  retrieveAuthorizationToken,
+  createNewUserFromData,
+  createNewUserFromToken,
+  createUserIfNotExistsFromGitHubData,
+} from "../../services/integrations/github";
 import crypto from "crypto";
+import { getUserByGithubId } from "../../models/userModel";
 
 export function redirectToGithubAuthorizationEndpoint(req: Request, res: Response) {
   const link = getAuthorizationEndpoint();
@@ -11,7 +19,7 @@ export function redirectToGithubAuthorizationEndpoint(req: Request, res: Respons
     signed: true,
     httpOnly: true,
     sameSite: "lax",
-    // secure: true, // Add this in when we start using HTTPS
+    // secure: true, // NOTE: Add this in when we start using HTTPS
   });
   res.redirect(link.toString());
 }
@@ -48,10 +56,20 @@ export async function handleGithubAuthorizationCallback(req: Request, res: Respo
     return;
   }
   const token = await retrieveAuthorizationToken(code);
-  // if (token === false) {
-  //   // TODO: Throw exception to make it clear what the issue is?
-  //   // In this case, scopes or state mismatched
-  //   res.sendStatus(401);
-  // }
-  res.sendStatus(501);
+  if (!token) {
+    // TODO: Throw named exception to make it clear what the issue is
+    // In this case, scopes or state mismatched
+    res.sendStatus(401);
+  }
+
+  // TODO: Error handle this call if we can't retrieve the github user data
+  const githubUserData = await getGitHubUserData(token);
+  const dbUserData = await createUserIfNotExistsFromGitHubData(token, githubUserData);
+
+  if (dbUserData === null) {
+    res.status(500).send("Unable to create new AlgoDB account :(");
+    return;
+  }
+  req.session.userId = dbUserData.id;
+  res.redirect("/");
 }
